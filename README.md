@@ -1,7 +1,7 @@
 # ☁️ AWS Lambda & API Gateway
 ## Java-Based Microservices on Serverless Infrastructure
 
-<img src="assets/images/4-lambda-function-creation.png" alt="Lambda Function Creation" width="70%">
+<img src="assets/images/4-lambda-function-creation.png" alt="Lambda Function Creation">
 
 [![Java](https://img.shields.io/badge/Java-17-blue.svg)](https://www.oracle.com/java/)
 [![Maven](https://img.shields.io/badge/Maven-3.9%2B-red.svg)](https://maven.apache.org/)
@@ -92,7 +92,6 @@ The application follows a **layered serverless architecture**:
 |-------|-----------|----------------|
 | **Entry Point** | `LambdaHandler` | Receives AWS events, routes by `action` key |
 | **Service** | `MathService`, `GreetingService`, `UserService` | Pure business logic, no AWS dependencies |
-| **Model** | `User` | Plain data object representing a user |
 | **Infrastructure** | AWS Lambda + API Gateway | Runtime, routing, and public exposure |
 
 The **mapping templates** in API Gateway translate HTTP query parameters and JSON body fields into a flat `Map<String, Object>` consumed by the Lambda handler, keeping the Java code decoupled from HTTP concerns.
@@ -123,7 +122,7 @@ The **mapping templates** in API Gateway translate HTTP query parameters and JSO
 ```bash
 mvn archetype:generate \
   -DgroupId=edu.eci.arep \
-  -DartifactId=AREP-homework-4-aws-lambda-and-api-gateway \
+  -DartifactId=aws-lambda-and-api-gateway \
   -Dpackage=edu.eci.arep \
   -DarchetypeArtifactId=maven-archetype-quickstart \
   -DinteractiveMode=false
@@ -141,7 +140,7 @@ The `maven-shade-plugin` produces a fat JAR at:
 target/aws-lambda-and-api-gateway-1.0-SNAPSHOT.jar
 ```
 
-<img src="assets/images/2-mvn-package-build.png" alt="Maven Build Success" width="70%">
+<img src="assets/images/2-mvn-package-build.png" alt="Maven Build Success" width="80%">
 
 *Terminal showing a successful `mvn clean package` build*
 
@@ -160,11 +159,11 @@ target/aws-lambda-and-api-gateway-1.0-SNAPSHOT.jar
     - **Execution role:** `LabRole` (AWS Academy)
 4. Click **Create function**
 
-<img src="assets/images/3-lambda-function-configuration.png" alt="Lambda Function Configuration Form" width="70%">
+<img src="assets/images/3-lambda-function-configuration.png" alt="Lambda Function Configuration Form">
 
 *Lambda function creation form with all required fields filled in*
 
-<img src="assets/images/4-lambda-function-creation.png" alt="Lambda Function Successfully Created" width="70%">
+<img src="assets/images/4-lambda-function-creation.png" alt="Lambda Function Successfully Created">
 
 *Confirmation screen after the Lambda function is successfully created*
 
@@ -174,7 +173,7 @@ target/aws-lambda-and-api-gateway-1.0-SNAPSHOT.jar
 2. Select `target/aws-lambda-and-api-gateway-1.0-SNAPSHOT.jar`
 3. Click **Save**
 
-<img src="assets/images/5-lambda-jar-upload.png" alt="Lambda JAR Upload Dialog" width="70%">
+<img src="assets/images/5-lambda-jar-upload.png" alt="Lambda JAR Upload Dialog">
 
 *Upload dialog showing the fat JAR selected and ready to be saved*
 
@@ -189,7 +188,7 @@ edu.eci.arep.handler.LambdaHandler::handleRequest
 
 3. Click **Save**
 
-<img src="assets/images/6-lambda-handler-configuration.png" alt="Lambda Handler Configuration" width="70%">
+<img src="assets/images/6-lambda-handler-configuration.png" alt="Lambda Handler Configuration">
 
 *Runtime settings editor with the correct fully-qualified handler path*
 
@@ -222,29 +221,29 @@ Navigate to the **Test** tab and create the following saved events:
 }
 ```
 
-<img src="assets/images/7-1-lambda-test-greet-event.png" alt="Lambda Test Event — Greeting" width="70%">
+<img src="assets/images/7-1-lambda-test-greet-event.png" alt="Lambda Test Event — Greeting">
 
 *Test event `testGreet` configured with action and name fields*
 
-<img src="assets/images/7-2-lambda-test-square-event.png" alt="Lambda Test Event — Square" width="70%">
+<img src="assets/images/7-2-lambda-test-square-event.png" alt="Lambda Test Event — Square">
 
 *Test event `testSquare` configured with action and value fields*
 
-<img src="assets/images/7-3-lambda-test-user-event.png" alt="Lambda Test Event — Create User" width="70%">
+<img src="assets/images/7-3-lambda-test-user-event.png" alt="Lambda Test Event — Create User">
 
 *Test event `testCreateUser` configured with action, name, and email fields*
 
 ### Step 5 — Execute the Test Events
 
-<img src="assets/images/8-1-lambda-test-greet-result.png" alt="Lambda Test Result — Greeting" width="70%">
+<img src="assets/images/8-1-lambda-test-greet-result.png" alt="Lambda Test Result — Greeting">
 
 *Greeting test returning* `{"message": "Hello, AREP!"}` *with status succeeded*
 
-<img src="assets/images/8-2-lambda-test-square-result.png" alt="Lambda Test Result — Square" width="70%">
+<img src="assets/images/8-2-lambda-test-square-result.png" alt="Lambda Test Result — Square">
 
 *Square test returning* `25` *for input value* `5`
 
-<img src="assets/images/8-3-lambda-test-user-result.png" alt="Lambda Test Result — Create User" width="70%">
+<img src="assets/images/8-3-lambda-test-user-result.png" alt="Lambda Test Result — Create User">
 
 *User creation test returning a clean JSON object with name and email*
 
@@ -261,11 +260,11 @@ Navigate to the **Test** tab and create the following saved events:
     - **Endpoint type:** Regional
 3. Click **Create API**
 
-<img src="assets/images/9-api-gateway-configuration.png" alt="API Gateway Creation Form" width="70%">
+<img src="assets/images/9-api-gateway-configuration.png" alt="API Gateway Creation Form">
 
 *REST API creation form with name, description, and Regional endpoint type*
 
-<img src="assets/images/10-api-gateway-creation.png" alt="API Gateway Successfully Created" width="70%">
+<img src="assets/images/10-api-gateway-creation.png" alt="API Gateway Successfully Created">
 
 *API Gateway resources panel after successful creation*
 
@@ -275,7 +274,7 @@ Navigate to the **Test** tab and create the following saved events:
 2. Set **Integration type** to **Lambda Function** and select `arep-lambda-handler`
 3. Click **Save**
 
-<img src="assets/images/11-api-gateway-get-method-setup.png" alt="GET Method Execution Panel" width="70%">
+<img src="assets/images/11-api-gateway-get-method-setup.png" alt="GET Method Execution Panel">
 
 *GET method execution panel showing Lambda integration and method flow diagram*
 
@@ -286,7 +285,7 @@ Navigate to the **Test** tab and create the following saved events:
 3. Set **Integration type** to **Lambda Function** and select `arep-lambda-handler`
 4. Click **Save**
 
-<img src="assets/images/12-api-gateway-post-method-setup.png" alt="POST Method on /users" width="70%">
+<img src="assets/images/12-api-gateway-post-method-setup.png" alt="POST Method on /users">
 
 *POST method on `/users` showing Lambda integration and the resource tree with GET and POST methods*
 
@@ -298,7 +297,7 @@ In the **GET** method → **Method request** → **URL query string parameters**
 - `name`
 - `value`
 
-<img src="assets/images/13-api-gateway-get-method-request-query-params.png" alt="GET Method Request Query Parameters" width="70%">
+<img src="assets/images/13-api-gateway-get-method-request-query-params.png" alt="GET Method Request Query Parameters">
 
 *Method request editor showing the three registered query string parameters*
 
@@ -320,11 +319,11 @@ In the **GET** method → **Integration request**:
 }
 ```
 
-<img src="assets/images/14-api-gateway-get-integration-request-mapping.png" alt="GET Integration Request Mapping" width="70%">
+<img src="assets/images/14-api-gateway-get-integration-request-mapping.png" alt="GET Integration Request Mapping">
 
 *Integration request showing the three URL query string parameters mapped from method request*
 
-<img src="assets/images/15-api-gateway-get-mapping-template.png" alt="GET Mapping Template" width="70%">
+<img src="assets/images/15-api-gateway-get-mapping-template.png" alt="GET Mapping Template">
 
 *Velocity mapping template for the GET method extracting query parameters*
 
@@ -340,7 +339,7 @@ In the **POST `/users`** method → **Integration request** → **Mapping templa
 }
 ```
 
-<img src="assets/images/16-api-gateway-post-mapping-template.png" alt="POST Mapping Template" width="70%">
+<img src="assets/images/16-api-gateway-post-mapping-template.png" alt="POST Mapping Template">
 
 *Velocity mapping template for the POST method extracting body fields*
 
@@ -356,7 +355,7 @@ The **Invoke URL** will follow the pattern:
 https://{id}.execute-api.us-east-1.amazonaws.com/production
 ```
 
-<img src="assets/images/17-api-gateway-deployment-stage.png" alt="API Gateway Deployment Stage" width="70%">
+<img src="assets/images/17-api-gateway-deployment-stage.png" alt="API Gateway Deployment Stage">
 
 *Production stage editor showing the active Invoke URL and deployment details*
 
@@ -381,7 +380,7 @@ The three endpoints were validated using **Postman** with the collection **AWS L
 - **Method:** `GET`
 - **URL:** `https://annfncw1tf.execute-api.us-east-1.amazonaws.com/production?action=greet&name=AREP`
 
-<img src="assets/images/18-1-postman-get-greet-result.png" alt="Postman GET Greeting Result" width="70%">
+<img src="assets/images/18-1-postman-get-greet-result.png" alt="Postman GET Greeting Result">
 
 *Postman returning* `{"message": "Hello, AREP!"}` *with HTTP 200 OK*
 
@@ -390,7 +389,7 @@ The three endpoints were validated using **Postman** with the collection **AWS L
 - **Method:** `GET`
 - **URL:** `https://annfncw1tf.execute-api.us-east-1.amazonaws.com/production?action=square&value=5`
 
-<img src="assets/images/18-2-postman-get-square-result.png" alt="Postman GET Square Result" width="70%">
+<img src="assets/images/18-2-postman-get-square-result.png" alt="Postman GET Square Result">
 
 *Postman returning* `25` *for input value* `5` *with HTTP 200 OK*
 
@@ -408,7 +407,7 @@ The three endpoints were validated using **Postman** with the collection **AWS L
 }
 ```
 
-<img src="assets/images/18-3-postman-post-user-result.png" alt="Postman POST Create User Result" width="70%">
+<img src="assets/images/18-3-postman-post-user-result.png" alt="Postman POST Create User Result">
 
 *Postman returning the user JSON object with name and email fields, HTTP 200 OK*
 
