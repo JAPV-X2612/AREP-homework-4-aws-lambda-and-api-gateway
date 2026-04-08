@@ -4,6 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import edu.eci.arep.service.GreetingService;
 import edu.eci.arep.service.MathService;
+import edu.eci.arep.service.UserService;
 
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class LambdaHandler implements RequestHandler<Map<String, String>, String
 
     private final MathService mathService = new MathService();
     private final GreetingService greetingService = new GreetingService();
+    private final UserService userService = new UserService();
 
     /**
      * Handles the Lambda invocation by reading query parameters from the
@@ -34,13 +36,18 @@ public class LambdaHandler implements RequestHandler<Map<String, String>, String
         String action = input.getOrDefault("action", "");
 
         return switch (action) {
+            case "greet" -> {
+                String name = input.getOrDefault("name", "World");
+                yield greetingService.greet(name);
+            }
             case "square" -> {
                 String raw = input.getOrDefault("value", "0");
                 yield String.valueOf(mathService.square(Integer.parseInt(raw)));
             }
-            case "greet" -> {
-                String name = input.getOrDefault("name", "World");
-                yield greetingService.greet(name);
+            case "user" -> {
+                String name = input.getOrDefault("name", "");
+                String email = input.getOrDefault("email", "");
+                yield userService.getUser(name, email);
             }
             default -> "{\"error\": \"Unknown action: " + action + "\"}";
         };
