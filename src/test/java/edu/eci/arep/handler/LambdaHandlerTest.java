@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for the LambdaHandler class.
@@ -27,20 +26,28 @@ class LambdaHandlerTest {
 
     @Test
     void testSquareAction() {
-        Map<String, String> input = Map.of("action", "square", "value", "7");
-        assertEquals("49", handler.handleRequest(input, null));
+        Map<String, Object> input = Map.of("action", "square", "value", "7");
+        assertEquals(49, handler.handleRequest(input, null));
     }
 
     @Test
     void testGreetAction() {
-        Map<String, String> input = Map.of("action", "greet", "name", "AREP");
+        Map<String, Object> input = Map.of("action", "greet", "name", "AREP");
         assertEquals("{\"message\": \"Hello, AREP!\"}", handler.handleRequest(input, null));
     }
 
     @Test
+    void testUserAction() {
+        Map<String, Object> input = Map.of("action", "user", "name", "Jesús Pinzón", "email", "jesus.pinzon@escuelaing.edu.co");
+        Map<?, ?> result = (Map<?, ?>) handler.handleRequest(input, null);
+        assertEquals("Jesús Pinzón", result.get("name"));
+        assertEquals("jesus.pinzon@escuelaing.edu.co", result.get("email"));
+    }
+
+    @Test
     void testUnknownAction() {
-        Map<String, String> input = Map.of("action", "unknown");
-        String result = handler.handleRequest(input, null);
-        assertTrue(result.contains("error"));
+        Map<String, Object> input = Map.of("action", "unknown");
+        Map<?, ?> result = (Map<?, ?>) handler.handleRequest(input, null);
+        assertTrue(result.containsKey("error"));
     }
 }
