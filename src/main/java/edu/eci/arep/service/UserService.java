@@ -1,7 +1,6 @@
 package edu.eci.arep.service;
 
-import com.google.gson.Gson;
-import edu.eci.arep.model.User;
+import java.util.Map;
 
 /**
  * Service class that processes user data and serializes it to JSON.
@@ -12,16 +11,15 @@ import edu.eci.arep.model.User;
  */
 public class UserService {
 
-    private static final Gson GSON = new Gson();
-
     /**
-     * Builds a User from the given name and email and returns it as a JSON string.
+     * Builds and returns a map with the user's name and email,
+     * which Lambda serializes as a clean JSON object.
      *
      * @param name  the user's full name
      * @param email the user's email address
-     * @return a JSON string representing the user
+     * @return a map representing the user, serialized to JSON by Lambda
      */
-    public String getUser(String name, String email) {
-        return GSON.toJson(new User(name, email));
+    public Map<String, String> getUser(String name, String email) {
+        return Map.of("name", name, "email", email);
     }
 }

@@ -9,47 +9,46 @@ import edu.eci.arep.service.UserService;
 import java.util.Map;
 
 /**
- * AWS Lambda entry point that routes incoming API Gateway requests to
- * the appropriate service based on the "action" query parameter.
- * Supported actions: "square" and "greet".
+ * AWS Lambda entry point that routes incoming API Gateway requests to the appropriate service based on the "action"
+ * query parameter (GET) or the request body fields (POST).
  *
  * @author Jesús Pinzón
  * @version 1.0
  * @since 2026-04-07
  */
-public class LambdaHandler implements RequestHandler<Map<String, String>, String> {
+public class LambdaHandler implements RequestHandler<Map<String, Object>, Object> {
 
     private final MathService mathService = new MathService();
     private final GreetingService greetingService = new GreetingService();
     private final UserService userService = new UserService();
 
     /**
-     * Handles the Lambda invocation by reading query parameters from the
-     * input map and delegating to the correct service method.
+     * Handles the Lambda invocation by reading the input map and delegating to the correct service.
+     * GET actions use the "action" key; POST user creation uses "name" and "email" keys directly.
      *
-     * @param input   the map of query parameters forwarded by API Gateway
+     * @param input   the map of parameters forwarded by API Gateway
      * @param context the Lambda execution context provided by AWS
-     * @return a JSON string with the service response, or an error message
+     * @return a plain object (String, Integer, or Map) serialized cleanly by Lambda
      */
     @Override
-    public String handleRequest(Map<String, String> input, Context context) {
-        String action = input.getOrDefault("action", "");
+    public Object handleRequest(Map<String, Object> input, Context context) {
+        String action = (String) input.getOrDefault("action", "");
 
         return switch (action) {
             case "greet" -> {
-                String name = input.getOrDefault("name", "World");
+                String name = (String) input.getOrDefault("name", "World");
                 yield greetingService.greet(name);
             }
             case "square" -> {
-                String raw = input.getOrDefault("value", "0");
-                yield String.valueOf(mathService.square(Integer.parseInt(raw)));
+                int value = Integer.parseInt((String) input.getOrDefault("value", "0"));
+                yield mathService.square(value);
             }
             case "user" -> {
-                String name = input.getOrDefault("name", "");
-                String email = input.getOrDefault("email", "");
+                String name = (String) input.getOrDefault("name", "");
+                String email = (String) input.getOrDefault("email", "");
                 yield userService.getUser(name, email);
             }
-            default -> "{\"error\": \"Unknown action: " + action + "\"}";
+            default -> Map.of("error", "Unknown action: " + action);
         };
     }
 }
